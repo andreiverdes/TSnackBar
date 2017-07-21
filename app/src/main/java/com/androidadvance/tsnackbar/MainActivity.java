@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                 TSnackbar snackbar = TSnackbar
-                        .make(relative_layout_main, "Had a snack at Snackbar  Had a snack at Snackbar  Had a snack at Snackbar Had a snack at Snackbar Had a snack at Snackbar Had a snack at Snackbar", TSnackbar.LENGTH_LONG);
+                        .make(findViewById(android.R.id.content), "Had a snack at Snackbar  ", TSnackbar.LENGTH_LONG);
                 snackbar.setActionTextColor(Color.WHITE);
                 View snackbarView = snackbar.getView();
                 snackbarView.setBackgroundColor(Color.parseColor("#CC00CC"));

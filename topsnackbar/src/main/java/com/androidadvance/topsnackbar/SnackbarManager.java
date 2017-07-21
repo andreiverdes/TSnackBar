@@ -87,7 +87,7 @@ class SnackbarManager {
             }
 
             if (mCurrentSnackbar != null && cancelSnackbarLocked(mCurrentSnackbar,
-                    TSnackbar.Callback.DISMISS_EVENT_CONSECUTIVE)) {
+                    com.androidadvance.topsnackbar.Callback.DISMISS_EVENT_CONSECUTIVE)) {
                 // If we currently have a TSnackbar, try and cancel it and wait in line
                 return;
             } else {
@@ -230,7 +230,7 @@ class SnackbarManager {
     private void handleTimeout(SnackbarRecord record) {
         synchronized (mLock) {
             if (mCurrentSnackbar == record || mNextSnackbar == record) {
-                cancelSnackbarLocked(record, TSnackbar.Callback.DISMISS_EVENT_TIMEOUT);
+                cancelSnackbarLocked(record, com.androidadvance.topsnackbar.Callback.DISMISS_EVENT_TIMEOUT);
             }
         }
     }
