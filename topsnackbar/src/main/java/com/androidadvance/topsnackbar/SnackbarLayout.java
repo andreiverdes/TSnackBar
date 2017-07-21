@@ -6,7 +6,6 @@ import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -104,23 +103,10 @@ public class SnackbarLayout extends LinearLayout {
                 remeasure = true;
             }
         }
-        if(getParent() != null && ((ViewGroup) getParent()).getId() == android.R.id.content) {
-            heightMeasureSpec += getStatusBarHeight();
-            remeasure = true;
-        }
 
         if (remeasure) {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         }
-    }
-
-    public int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
     }
 
     void animateChildrenIn(int delay, int duration) {

@@ -47,13 +47,13 @@ public final class TSnackbar {
     public @interface Duration {
     }
 
-    
+
     public static final int LENGTH_INDEFINITE = -2;
 
-    
+
     public static final int LENGTH_SHORT = -1;
 
-    
+
     public static final int LENGTH_LONG = 0;
 
     private static final int ANIMATION_DURATION = 250;
@@ -91,9 +91,25 @@ public final class TSnackbar {
         mContext = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(mContext);
         mView = (SnackbarLayout) inflater.inflate(R.layout.tsnackbar_layout, mParent, false);
+        if(parent.getId() == android.R.id.content) {
+            int statusBarHeight = getStatusBarHeight(mView.getContext());
+            int top = mView.getPaddingTop() + statusBarHeight;
+            int bottom = mView.getPaddingBottom();
+            int left = mView.getPaddingLeft();
+            int right = mView.getPaddingRight();
+            mView.setPadding(left, top, right, bottom);
+        }
     }
 
-    
+    public int getStatusBarHeight(Context context) {
+        int result = 0;
+        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = context.getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
     @NonNull
     public static TSnackbar make(@NonNull View view, @NonNull CharSequence text,
                                  @Duration int duration) {
@@ -103,7 +119,7 @@ public final class TSnackbar {
         return snackbar;
     }
 
-    
+
     @NonNull
     public static TSnackbar make(@NonNull View view, @StringRes int resId, @Duration int duration) {
         return make(view, view.getResources()
@@ -114,31 +130,31 @@ public final class TSnackbar {
         ViewGroup fallback = null;
         do {
             if (view instanceof CoordinatorLayout) {
-                
+
                 return (ViewGroup) view;
             } else if (view instanceof FrameLayout) {
                 if (view.getId() == android.R.id.content) {
-                    
-                    
+
+
                     return (ViewGroup) view;
                 } else {
-                    
+
                     fallback = (ViewGroup) view;
                 }
             }
 
             if (view != null) {
-                
+
                 final ViewParent parent = view.getParent();
                 view = parent instanceof View ? (View) parent : null;
             }
         } while (view != null);
 
-        
+
         return fallback;
     }
 
-    
+
     @Deprecated
     public TSnackbar addIcon(int resource_id, int size) {
         final TextView tv = mView.getMessageView();
@@ -212,7 +228,7 @@ public final class TSnackbar {
     }
 
 
-    
+
     private static float convertDpToPixel(float dp, Context context) {
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
@@ -221,7 +237,7 @@ public final class TSnackbar {
     }
 
 
-    
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private static Bitmap getBitmap(VectorDrawable vectorDrawable) {
         Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(),
@@ -244,13 +260,13 @@ public final class TSnackbar {
     }
 
 
-    
+
     @NonNull
     public TSnackbar setAction(@StringRes int resId, View.OnClickListener listener) {
         return setAction(mContext.getText(resId), listener);
     }
 
-    
+
     @NonNull
     public TSnackbar setAction(CharSequence text, final View.OnClickListener listener) {
         final TextView tv = mView.getActionView();
@@ -265,7 +281,7 @@ public final class TSnackbar {
                 @Override
                 public void onClick(View view) {
                     listener.onClick(view);
-                    
+
                     dispatchDismiss(Callback.DISMISS_EVENT_ACTION);
                 }
             });
@@ -273,7 +289,7 @@ public final class TSnackbar {
         return this;
     }
 
-    
+
     @NonNull
     public TSnackbar setActionTextColor(ColorStateList colors) {
         final TextView tv = mView.getActionView();
@@ -281,7 +297,7 @@ public final class TSnackbar {
         return this;
     }
 
-    
+
     @NonNull
     public TSnackbar setActionTextColor(@ColorInt int color) {
         final TextView tv = mView.getActionView();
@@ -289,7 +305,7 @@ public final class TSnackbar {
         return this;
     }
 
-    
+
     @NonNull
     public TSnackbar setText(@NonNull CharSequence message) {
         final TextView tv = mView.getMessageView();
@@ -297,38 +313,38 @@ public final class TSnackbar {
         return this;
     }
 
-    
+
     @NonNull
     public TSnackbar setText(@StringRes int resId) {
         return setText(mContext.getText(resId));
     }
 
-    
+
     @NonNull
     public TSnackbar setDuration(@Duration int duration) {
         mDuration = duration;
         return this;
     }
 
-    
+
     @Duration
     public int getDuration() {
         return mDuration;
     }
 
-    
+
     @NonNull
     public View getView() {
         return mView;
     }
 
-    
+
     public void show() {
         SnackbarManager.getInstance()
                 .show(mDuration, mManagerCallback);
     }
 
-    
+
     public void dismiss() {
         dispatchDismiss(Callback.DISMISS_EVENT_MANUAL);
     }
@@ -338,20 +354,20 @@ public final class TSnackbar {
                 .dismiss(mManagerCallback, event);
     }
 
-    
+
     @NonNull
     public TSnackbar setCallback(Callback callback) {
         mCallback = callback;
         return this;
     }
 
-    
+
     public boolean isShown() {
         return SnackbarManager.getInstance()
                 .isCurrent(mManagerCallback);
     }
 
-    
+
     public boolean isShownOrQueued() {
         return SnackbarManager.getInstance()
                 .isCurrentOrNext(mManagerCallback);
@@ -374,7 +390,7 @@ public final class TSnackbar {
             final ViewGroup.LayoutParams lp = mView.getLayoutParams();
 
             if (lp instanceof CoordinatorLayout.LayoutParams) {
-                
+
 
                 final Behavior behavior = new Behavior();
                 behavior.setStartAlphaSwipeDistance(0.1f);
@@ -391,12 +407,12 @@ public final class TSnackbar {
                         switch (state) {
                             case SwipeDismissBehavior.STATE_DRAGGING:
                             case SwipeDismissBehavior.STATE_SETTLING:
-                                
+
                                 SnackbarManager.getInstance()
                                         .cancelTimeout(mManagerCallback);
                                 break;
                             case SwipeDismissBehavior.STATE_IDLE:
-                                
+
                                 SnackbarManager.getInstance()
                                         .restoreTimeout(mManagerCallback);
                                 break;
@@ -416,10 +432,10 @@ public final class TSnackbar {
             @Override
             public void onViewDetachedFromWindow(View v) {
                 if (isShownOrQueued()) {
-                    
-                    
-                    
-                    
+
+
+
+
                     sHandler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -431,10 +447,10 @@ public final class TSnackbar {
         });
 
         if (ViewCompat.isLaidOut(mView)) {
-            
+
             animateViewIn();
         } else {
-            
+
             mView.setOnLayoutChangeListener(new SnackbarLayout.OnLayoutChangeListener() {
                 @Override
                 public void onLayoutChange(View view, int left, int top, int right, int bottom) {
@@ -545,21 +561,21 @@ public final class TSnackbar {
     }
 
     private void onViewHidden(int event) {
-        
+
         SnackbarManager.getInstance()
                 .onDismissed(mManagerCallback);
-        
+
         if (mCallback != null) {
             mCallback.onDismissed(this, event);
         }
-        
+
         final ViewParent parent = mView.getParent();
         if (parent instanceof ViewGroup) {
             ((ViewGroup) parent).removeView(mView);
         }
     }
 
-    
+
     private boolean isBeingDragged() {
         final ViewGroup.LayoutParams lp = mView.getLayoutParams();
 
@@ -585,8 +601,8 @@ public final class TSnackbar {
         @Override
         public boolean onInterceptTouchEvent(CoordinatorLayout parent, SnackbarLayout child,
                                              MotionEvent event) {
-            
-            
+
+
             if (parent.isPointInChildBounds(child, (int) event.getX(), (int) event.getY())) {
                 switch (event.getActionMasked()) {
                     case MotionEvent.ACTION_DOWN:
