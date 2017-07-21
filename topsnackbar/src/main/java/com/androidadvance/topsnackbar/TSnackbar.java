@@ -23,8 +23,12 @@ import android.support.design.widget.SwipeDismissBehavior;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
+import android.text.Spannable;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -37,6 +41,8 @@ import android.widget.TextView;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public final class TSnackbar {
@@ -196,6 +202,30 @@ public final class TSnackbar {
         }
         final Drawable[] compoundDrawables = tv.getCompoundDrawables();
         tv.setCompoundDrawables(compoundDrawables[0], compoundDrawables[1], drawable, compoundDrawables[3]);
+        return this;
+    }
+
+    public TSnackbar setWordAction(String word, final View.OnClickListener clickListener) {
+        TextView messageView = mView.getMessageView();
+        String message = messageView.getText().toString();
+        if (message.contains(word)) {
+            messageView.setMovementMethod(LinkMovementMethod.getInstance());
+            messageView.setText(message, TextView.BufferType.SPANNABLE);
+            Pattern pattern = Pattern.compile(word);
+            Matcher match = pattern.matcher(message);
+            while (match.find()) {
+                Spannable spannable = (Spannable) messageView.getText();
+                ClickableSpan clickableSpan = new ClickableSpan() {
+                    @Override
+                    public void onClick(View widget) {
+                        clickListener.onClick(widget);
+                    }
+                };
+                spannable.setSpan(clickableSpan, match.start(), match.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        } else {
+            Log.e("TSnackbar", "Word " + word + " not found!");
+        }
         return this;
     }
 
