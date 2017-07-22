@@ -78,9 +78,14 @@ public class MainActivity extends AppCompatActivity {
                                 Log.d("CLICKED Action", "CLIDKED Action");
                             }
                         })
-                        .setWordAction("snack", new View.OnClickListener() {
+                        .addWordAction("snack", new View.OnClickListener() {
                             @Override public void onClick(View v) {
                                 Toast.makeText(MainActivity.this, "haha", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .addWordAction("at", new View.OnClickListener() {
+                            @Override public void onClick(View v) {
+                                Toast.makeText(MainActivity.this, "haha2", Toast.LENGTH_SHORT).show();
                             }
                         });
                 snackbar.setActionTextColor(Color.WHITE);

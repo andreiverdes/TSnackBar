@@ -24,6 +24,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
 import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
@@ -205,16 +206,15 @@ public final class TSnackbar {
         return this;
     }
 
-    public TSnackbar setWordAction(String word, final View.OnClickListener clickListener) {
+    public TSnackbar addWordAction(String word, final View.OnClickListener clickListener) {
         TextView messageView = mView.getMessageView();
         String message = messageView.getText().toString();
         if (message.contains(word)) {
             messageView.setMovementMethod(LinkMovementMethod.getInstance());
-            messageView.setText(message, TextView.BufferType.SPANNABLE);
             Pattern pattern = Pattern.compile(word);
             Matcher match = pattern.matcher(message);
             while (match.find()) {
-                Spannable spannable = (Spannable) messageView.getText();
+                SpannableString spannable = (SpannableString) messageView.getText();
                 ClickableSpan clickableSpan = new ClickableSpan() {
                     @Override
                     public void onClick(View widget) {
