@@ -66,11 +66,11 @@ public class SnackbarLayout extends LinearLayout {
         mActionView = (Button) findViewById(R.id.snackbar_action);
     }
 
-    TextView getMessageView() {
+    public TextView getMessageView() {
         return mMessageView;
     }
 
-    Button getActionView() {
+    public Button getActionView() {
         return mActionView;
     }
 
