@@ -23,6 +23,7 @@ import android.support.design.widget.SwipeDismissBehavior;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
+import android.support.v7.widget.AppCompatImageButton;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -299,7 +300,7 @@ public final class TSnackbar {
 
     @NonNull
     public TSnackbar setAction(CharSequence text, final View.OnClickListener listener) {
-        final TextView tv = mView.getActionView();
+        final TextView tv = mView.getActionTextView();
 
         if (TextUtils.isEmpty(text) || listener == null) {
             tv.setVisibility(View.GONE);
@@ -319,10 +320,26 @@ public final class TSnackbar {
         return this;
     }
 
+    @NonNull
+    public TSnackbar setActionDrawable(@DrawableRes int drawableResId, final View.OnClickListener listener) {
+        final AppCompatImageButton button = mView.getActionImageView();
+        button.setImageResource(drawableResId);
+        button.setVisibility(View.VISIBLE);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(listener != null) {
+                    listener.onClick(view);
+                }
+                dispatchDismiss(Callback.DISMISS_EVENT_ACTION);
+            }
+        });
+        return this;
+    }
 
     @NonNull
     public TSnackbar setActionTextColor(ColorStateList colors) {
-        final TextView tv = mView.getActionView();
+        final TextView tv = mView.getActionTextView();
         tv.setTextColor(colors);
         return this;
     }
@@ -330,7 +347,7 @@ public final class TSnackbar {
 
     @NonNull
     public TSnackbar setActionTextColor(@ColorInt int color) {
-        final TextView tv = mView.getActionView();
+        final TextView tv = mView.getActionTextView();
         tv.setTextColor(color);
         return this;
     }

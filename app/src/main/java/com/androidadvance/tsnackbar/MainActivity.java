@@ -54,6 +54,11 @@ public class MainActivity extends AppCompatActivity {
                                 Log.d("Action Button", "onClick triggered");
                             }
                         });
+                snackbar.setActionDrawable(R.drawable.ic_android_green_24dp, new View.OnClickListener() {
+                    @Override public void onClick(View v) {
+
+                    }
+                });
                 snackbar.setActionTextColor(Color.LTGRAY);
                 snackbar.addIcon(R.mipmap.ic_core, 200);
                 View snackbarView = snackbar.getView();

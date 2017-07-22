@@ -3,10 +3,10 @@ package com.androidadvance.topsnackbar;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.AppCompatImageButton;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -15,7 +15,8 @@ import android.widget.TextView;
  */
 public class SnackbarLayout extends LinearLayout {
     private TextView mMessageView;
-    private Button mActionView;
+    private TextView mActionTextView;
+    private AppCompatImageButton mActionImageView;
 
     private int mMaxWidth;
     private int mMaxInlineActionWidth;
@@ -63,15 +64,20 @@ public class SnackbarLayout extends LinearLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         mMessageView = (TextView) findViewById(R.id.snackbar_text);
-        mActionView = (Button) findViewById(R.id.snackbar_action);
+        mActionTextView = (TextView) findViewById(R.id.snackbar_action);
+        mActionImageView = (AppCompatImageButton) findViewById(R.id.snackbar_action_image);
     }
 
     public TextView getMessageView() {
         return mMessageView;
     }
 
-    public Button getActionView() {
-        return mActionView;
+    public TextView getActionTextView() {
+        return mActionTextView;
+    }
+
+    public AppCompatImageButton getActionImageView() {
+        return mActionImageView;
     }
 
     @Override
@@ -92,7 +98,7 @@ public class SnackbarLayout extends LinearLayout {
 
         boolean remeasure = false;
         if (isMultiLine && mMaxInlineActionWidth > 0
-                && mActionView.getMeasuredWidth() > mMaxInlineActionWidth) {
+                && mActionTextView.getMeasuredWidth() > mMaxInlineActionWidth) {
             if (updateViewsWithinLayout(VERTICAL, multiLineVPadding,
                     multiLineVPadding - singleLineVPadding)) {
                 remeasure = true;
@@ -117,9 +123,14 @@ public class SnackbarLayout extends LinearLayout {
                 .setStartDelay(delay)
                 .start();
 
-        if (mActionView.getVisibility() == VISIBLE) {
-            ViewCompat.setAlpha(mActionView, 0f);
-            ViewCompat.animate(mActionView)
+        animateActionViewIn(mActionTextView, delay, duration);
+        animateActionViewIn(mActionImageView, delay, duration);
+    }
+
+    private void animateActionViewIn(View actionView, int delay, int duration) {
+        if (actionView.getVisibility() == VISIBLE) {
+            ViewCompat.setAlpha(actionView, 0f);
+            ViewCompat.animate(actionView)
                     .alpha(1f)
                     .setDuration(duration)
                     .setStartDelay(delay)
@@ -135,9 +146,14 @@ public class SnackbarLayout extends LinearLayout {
                 .setStartDelay(delay)
                 .start();
 
-        if (mActionView.getVisibility() == VISIBLE) {
-            ViewCompat.setAlpha(mActionView, 1f);
-            ViewCompat.animate(mActionView)
+        animateActionViewOut(mActionTextView, delay, duration);
+        animateActionViewOut(mActionImageView, delay, duration);
+    }
+
+    private void animateActionViewOut(View actionView, int delay, int duration) {
+        if (actionView.getVisibility() == VISIBLE) {
+            ViewCompat.setAlpha(actionView, 1f);
+            ViewCompat.animate(actionView)
                     .alpha(0f)
                     .setDuration(duration)
                     .setStartDelay(delay)
