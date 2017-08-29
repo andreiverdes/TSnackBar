@@ -106,7 +106,7 @@ public final class TSnackbar {
             int left = mView.getPaddingLeft();
             int right = mView.getPaddingRight();
             mView.setPadding(left, top, right, bottom);
-        } else {
+        } else if(!(anchor instanceof ViewGroup)){
             mView.setY(anchor.getY());
         }
     }
