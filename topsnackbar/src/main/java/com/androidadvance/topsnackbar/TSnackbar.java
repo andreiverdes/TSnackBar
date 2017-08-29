@@ -94,7 +94,7 @@ public final class TSnackbar {
     private int mDuration;
     private Callback mCallback;
 
-    private TSnackbar(ViewGroup parent) {
+    private TSnackbar(ViewGroup parent, View anchor) {
         mParent = parent;
         mContext = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(mContext);
@@ -106,6 +106,8 @@ public final class TSnackbar {
             int left = mView.getPaddingLeft();
             int right = mView.getPaddingRight();
             mView.setPadding(left, top, right, bottom);
+        } else {
+            mView.setY(anchor.getY());
         }
     }
 
