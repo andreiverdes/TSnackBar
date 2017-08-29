@@ -23,7 +23,7 @@ android {
 }
 
 ext {
-    libraryVersion = '2.0.10'
+    libraryVersion = '2.0.11'
 }
 
 configurations {
