@@ -22,6 +22,10 @@ android {
     }
 }
 
+ext {
+    libraryVersion = '2.0.10'
+}
+
 configurations {
     javadocDeps
 }

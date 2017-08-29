@@ -137,6 +137,10 @@ public final class TSnackbar {
     private static ViewGroup findSuitableParent(View view) {
         ViewGroup fallback = null;
         do {
+            if (view instanceof ViewGroup) {
+                return ((ViewGroup) view);
+            }
+
             if (view instanceof CoordinatorLayout) {
 
                 return (ViewGroup) view;
